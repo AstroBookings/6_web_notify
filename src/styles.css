@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Set left and right margins to 5% of the viewport width for responsiveness */
+body {
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+
+/* Set right margin to 1vw for all span elements */
+span {
+  margin-right: 1vw;
+}
