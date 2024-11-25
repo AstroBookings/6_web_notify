@@ -7,24 +7,20 @@ import {
   Signal,
 } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { ErrorAtom } from '../../shared/ui/error.atom';
+import { LoadingAtom } from '../../shared/ui/loading.atom';
 import { HomeService } from './home.service';
 import { NotificationsListComponent } from './notifications-list.component';
 
 @Component({
   selector: 'lab-home-page',
-  imports: [NotificationsListComponent],
+  imports: [NotificationsListComponent, ErrorAtom, LoadingAtom],
   template: `
     <h1>Home</h1>
     @switch (status()) { @case ('Loading') {
-    <span aria-busy="true">Loading...</span>
+    <lab-loading />
     } @case ('Error') {
-    <input
-      type="text"
-      disabled
-      aria-invalid="true"
-      style="width: 50%"
-      [value]="error()"
-    />
+    <lab-error [error]="error()" />
     } @case ('Resolved') {
     <lab-notifications-list [notifications]="notifications.value() || []" />
     } }
