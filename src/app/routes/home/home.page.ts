@@ -1,7 +1,7 @@
 import { Component, inject, Resource } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NotificationDto } from '../../shared/models/notification.dto';
-import ResourceBlock from '../../shared/ui/resource.block';
+import { ResourceBlock } from '../../shared/ui/resource.block';
 import { HomeService } from './home.service';
 import { NotificationsListComponent } from './notifications-list.component';
 
@@ -18,9 +18,9 @@ import { NotificationsListComponent } from './notifications-list.component';
   imports: [NotificationsListComponent, ResourceBlock],
   template: `
     <h1>Home</h1>
-    <lab-resource [resource]="notificationsResource" [template]="template">
-      <ng-template #template let-data>
-        <lab-notifications-list [notifications]="data" />
+    <lab-resource [resource]="notificationsResource" [dataTemplate]="notificationsList">
+      <ng-template #notificationsList let-notifications>
+        <lab-notifications-list [notifications]="notifications" />
       </ng-template>
     </lab-resource>
   `,

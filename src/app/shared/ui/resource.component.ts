@@ -10,8 +10,6 @@ import {
   Signal,
   TemplateRef,
 } from '@angular/core';
-import { ErrorAtom } from './error.atom';
-import { LoadingAtom } from './loading.atom';
 
 /**
  * Resource block component
@@ -23,18 +21,18 @@ import { LoadingAtom } from './loading.atom';
  * @optional noDataTemplate - Template to be used to display the resource no data state
  */
 @Component({
-  selector: 'lab-resource',
+  selector: 'app-resource',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ErrorAtom, LoadingAtom, NgTemplateOutlet, JsonPipe],
-  template: `
-   @switch (status()) {
+  imports: [NgTemplateOutlet, JsonPipe],
+  template: ` 
+    @switch (status()) { 
       @case ('Loading') {
         <ng-container *ngTemplateOutlet="loadingTemplate() || defaultLoadingTemplate" />
-      }
+      } 
       @case ('Error') {
         <ng-container *ngTemplateOutlet="errorTemplate() || defaultErrorTemplate; context: { $implicit: error() }" />
-      }
-      @case ('Resolved') {
+      } 
+      @case ('Resolved') { 
         @if (resource().hasValue()) {
           <ng-container *ngTemplateOutlet="dataTemplate() || defaultDataTemplate; context: { $implicit: value() }" />
         } @else {
@@ -42,21 +40,21 @@ import { LoadingAtom } from './loading.atom';
         }
       }
     }
-  <ng-template #defaultLoadingTemplate>
-    <lab-loading />
-  </ng-template>
-  <ng-template #defaultErrorTemplate let-error>
-    <lab-error [error]="error" />
-  </ng-template>
-  <ng-template #defaultDataTemplate let-data>
-    <pre>{{ data | json }}</pre>
-  </ng-template>
-  <ng-template #defaultNoDataTemplate>
-    <span>🚫 No data yet</span>
-  </ng-template>
+    <ng-template #defaultLoadingTemplate>
+      <span>⏳ Loading...</span>
+    </ng-template>
+    <ng-template #defaultErrorTemplate let-error>
+      <span>❌ {{ error }}</span>
+    </ng-template>
+    <ng-template #defaultDataTemplate let-data>
+      <pre>{{ data | json }}</pre>
+    </ng-template>
+    <ng-template #defaultNoDataTemplate>
+      <span>🚫 No data yet</span>
+    </ng-template>
   `,
 })
-export class ResourceBlock {
+export class ResourceComponent {
   /**
    * Resource to be displayed
    * - Required

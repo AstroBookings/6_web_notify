@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NotificationDto } from '../../shared/models/notification.dto';
-import ResourceBlock from '../../shared/ui/resource.block';
+import { ResourceBlock } from '../../shared/ui/resource.block';
 import { NotificationDetailComponent } from './notification-detail.component';
 import { NotificationService } from './notification.service';
 
@@ -25,9 +25,9 @@ import { NotificationService } from './notification.service';
   selector: 'lab-notification',
   imports: [NotificationDetailComponent, ResourceBlock],
   template: `
-    <lab-resource [resource]="notificationResource" [template]="template">
-      <ng-template #template let-data>
-        <lab-notification-detail [notification]="data" />
+    <lab-resource [resource]="notificationResource" [dataTemplate]="notificationDetail">
+      <ng-template #notificationDetail let-notification>
+        <lab-notification-detail [notification]="notification" />
       </ng-template>
     </lab-resource>
   `,
