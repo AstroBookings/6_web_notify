@@ -1,22 +1,14 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
-  computed,
   inject,
   input,
   InputSignal,
   Resource,
   ResourceLoaderParams,
-  ResourceStatus,
-  Signal,
 } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import {
-  NotificationDto,
-  NullNotificationDto,
-} from '../../shared/models/notification.dto';
-import { ErrorAtom } from '../../shared/ui/error.atom';
-import { LoadingAtom } from '../../shared/ui/loading.atom';
+import { NotificationDto } from '../../shared/models/notification.dto';
+import ResourceBlock from '../../shared/ui/resource.block';
 import { NotificationDetailComponent } from './notification-detail.component';
 import { NotificationService } from './notification.service';
 
@@ -31,12 +23,13 @@ import { NotificationService } from './notification.service';
  */
 @Component({
   selector: 'lab-notification',
-  imports: [NotificationDetailComponent, LoadingAtom, ErrorAtom],
+  imports: [NotificationDetailComponent, ResourceBlock],
   template: `
-    @switch (status()) { @case ('Loading') {
-    <lab-loading /> } @case ('Error') { <lab-error [error]="error()" /> } @case
-    ('Resolved') {
-    <lab-notification-detail [notification]="notificationValue()" /> } }
+    <lab-resource [resource]="notificationResource" [template]="template">
+      <ng-template #template let-data>
+        <lab-notification-detail [notification]="data" />
+      </ng-template>
+    </lab-resource>
   `,
 })
 export default class NotificationPage {
@@ -46,37 +39,17 @@ export default class NotificationPage {
    */
   public readonly id: InputSignal<string | undefined> = input<string>();
 
-  private readonly notificationService: NotificationService =
-    inject(NotificationService);
-
-  private readonly notificationResource: Resource<NotificationDto> = rxResource(
-    {
+  /**
+   * Notification resource
+   * - Loaded by the notification service
+   */
+  protected readonly notificationResource: Resource<NotificationDto> =
+    rxResource({
       request: () => ({ id: this.id() || '' }),
       loader: (params: ResourceLoaderParams<{ id: string }>) =>
         this.notificationService.getNotificationById(params.request.id),
-    }
-  );
+    });
 
-  /**
-   * Status of the notification resource
-   * - Casted to a string to be used in the template
-   */
-  protected readonly status: Signal<string> = computed(
-    () => ResourceStatus[this.notificationResource.status()]
-  );
-  /**
-   * Error of the notification resource
-   * - Casted to a string to be used in the template
-   */
-  protected readonly error: Signal<string> = computed(() => {
-    const error = this.notificationResource.error();
-    return error ? (error as HttpErrorResponse).message : JSON.stringify(error);
-  });
-  /**
-   * Value of the notification resource
-   * - Defaults to undefined
-   */
-  protected readonly notificationValue: Signal<NotificationDto> = computed(
-    () => this.notificationResource.value() || NullNotificationDto
-  );
+  private readonly notificationService: NotificationService =
+    inject(NotificationService);
 }
