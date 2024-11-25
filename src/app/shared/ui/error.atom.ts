@@ -1,5 +1,9 @@
-import { Component, input } from '@angular/core';
+import { Component, input, InputSignal } from '@angular/core';
 
+/**
+ * Error atom component
+ * - Displays the error message
+ */
 @Component({
   selector: 'lab-error',
   template: `<input
@@ -11,5 +15,9 @@ import { Component, input } from '@angular/core';
   />`,
 })
 export class ErrorAtom {
-  public readonly error = input<string>();
+  /**
+   * Error message input signal
+   * - Required to avoid null errors in the template
+   */
+  public readonly error: InputSignal<string> = input.required<string>();
 }

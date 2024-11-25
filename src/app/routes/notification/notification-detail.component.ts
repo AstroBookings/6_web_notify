@@ -1,17 +1,22 @@
-import { Component, input } from '@angular/core';
+import { Component, input, InputSignal } from '@angular/core';
 import { NotificationDto } from '../../shared/models/notification.dto';
 
+/**
+ * Notification detail component
+ * - Displays the notification detail
+ */
 @Component({
   selector: 'lab-notification-detail',
   template: `
-    @if (notification()) {
-    <h3>{{ notification()?.subject }}</h3>
-    <p>{{ notification()?.message }}</p>
-    } @else {
-    <p>No notification found</p>
-    }
+    <h3>{{ notification().subject }}</h3>
+    <p>{{ notification().message }}</p>
   `,
 })
 export class NotificationDetailComponent {
-  public readonly notification = input<NotificationDto>();
+  /**
+   * Notification DTO input signal
+   * - Required to avoid null errors in the template
+   */
+  public readonly notification: InputSignal<NotificationDto> =
+    input.required<NotificationDto>();
 }

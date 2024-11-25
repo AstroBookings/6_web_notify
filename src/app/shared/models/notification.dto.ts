@@ -65,3 +65,20 @@ export type NotificationDto = {
    */
   updatedAt: Date;
 };
+
+/**
+ * Null notification DTO
+ * - Used to avoid null errors in the template
+ */
+export const NullNotificationDto: NotificationDto = {
+  id: '',
+  templateId: '',
+  userId: '',
+  data: '',
+  recipient: '',
+  subject: '',
+  message: '',
+  status: 'pending',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
