@@ -29,31 +29,35 @@ import { LoadingAtom } from './loading.atom';
   template: `
    @switch (status()) {
       @case ('Loading') {
-        <ng-container *ngTemplateOutlet="loadingTemplate() || defaultLoadingTemplate" />
+        @if (loadingTemplate()) {
+          <ng-container *ngTemplateOutlet="loadingTemplate()!" />
+        } @else {
+          <lab-loading />
+        }
       }
       @case ('Error') {
-        <ng-container *ngTemplateOutlet="errorTemplate() || defaultErrorTemplate; context: { $implicit: error() }" />
+        @if (errorTemplate()) {
+          <ng-container *ngTemplateOutlet="errorTemplate()!; context: { $implicit: error() }" />
+        } @else {
+          <lab-error [error]="error()" />
+        }
       }
       @case ('Resolved') {
         @if (resource().hasValue()) {
-          <ng-container *ngTemplateOutlet="dataTemplate() || defaultDataTemplate; context: { $implicit: value() }" />
+          @if (dataTemplate()) {
+            <ng-container *ngTemplateOutlet="dataTemplate()!; context: { $implicit: value() }" />
+          } @else {
+            <pre>{{ value() | json }}</pre>
+          }
         } @else {
-          <ng-container *ngTemplateOutlet="noDataTemplate() || defaultNoDataTemplate" />
+          @if (noDataTemplate()) {
+            <ng-container *ngTemplateOutlet="noDataTemplate()!" />
+          } @else {
+            <span>🚫 No data yet</span>
+          }
         }
       }
     }
-  <ng-template #defaultLoadingTemplate>
-    <lab-loading />
-  </ng-template>
-  <ng-template #defaultErrorTemplate let-error>
-    <lab-error [error]="error" />
-  </ng-template>
-  <ng-template #defaultDataTemplate let-data>
-    <pre>{{ data | json }}</pre>
-  </ng-template>
-  <ng-template #defaultNoDataTemplate>
-    <span>🚫 No data yet</span>
-  </ng-template>
   `,
 })
 export class ResourceBlock {

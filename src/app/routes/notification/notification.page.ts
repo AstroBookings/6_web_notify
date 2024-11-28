@@ -42,14 +42,14 @@ export default class NotificationPage {
   /**
    * Notification resource
    * - Loaded by the notification service
+   * - Triggered when the id input signal changes
    */
   protected readonly notificationResource: Resource<NotificationDto> =
     rxResource({
       request: () => ({ id: this.id() || '' }),
-      loader: (params: ResourceLoaderParams<{ id: string }>) =>
+      loader: (params: ResourceLoaderParams<{ id: string }>) => 
         this.notificationService.getNotificationById(params.request.id),
     });
 
-  private readonly notificationService: NotificationService =
-    inject(NotificationService);
+  private readonly notificationService: NotificationService = inject(NotificationService);
 }
